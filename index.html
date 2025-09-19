@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construction Material Request System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="card login-card">
+                <div class="login-header">
+                    <div class="login-logo">🏗️</div>
+                    <h1 class="login-title">Construction Material Request System</h1>
+                    <p class="login-subtitle">Welcome! Please sign in to continue</p>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label" for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <input type="password" id="password" name="password" class="form-input" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="role">Role</label>
+                        <select id="role" name="role" class="form-select" required>
+                            <option value="">Select Your Role</option>
+                            <option value="employee">Employee</option>
+                            <option value="warehouse">Warehouse Manager</option>
+                            <option value="department">Department Manager</option>
+                            <option value="construction">Construction Manager</option>
+                            <option value="administrative">Administrative Manager</option>
+                            <option value="project_manager">Project Manager</option>
+                            <option value="project_director">Project Director</option>
+                            <option value="procurement">Procurement Manager</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
+                </form>
+
+                <div class="users-demo">
+                    <div class="demo-title">Demo Users (For Testing)</div>
+                    <div class="demo-users">
+                        <div class="demo-user" onclick="fillLogin('employee1', '123', 'employee')">
+                            <span>John Smith</span>
+                            <span class="role-badge role-employee">Employee</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('warehouse1', '123', 'warehouse')">
+                            <span>Mike Johnson</span>
+                            <span class="role-badge role-warehouse">Warehouse Manager</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('department1', '123', 'department')">
+                            <span>Sarah Wilson</span>
+                            <span class="role-badge role-department">Department Manager</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('construction1', '123', 'construction')">
+                            <span>David Brown</span>
+                            <span class="role-badge role-construction">Construction Manager</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('administrative1', '123', 'administrative')">
+                            <span>Lisa Davis</span>
+                            <span class="role-badge role-administrative">Administrative Manager</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('project_manager1', '123', 'project_manager')">
+                            <span>Robert Garcia</span>
+                            <span class="role-badge role-project-manager">Project Manager</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('project_director1', '123', 'project_director')">
+                            <span>Jennifer Martinez</span>
+                            <span class="role-badge role-project-director">Project Director</span>
+                        </div>
+                        <div class="demo-user" onclick="fillLogin('procurement1', '123', 'procurement')">
+                            <span>Michael Anderson</span>
+                            <span class="role-badge role-procurement">Procurement Manager</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div id="navbar" class="navbar d-none">
+        <div class="nav-container">
+            <div class="logo">🏗️ Construction Material System</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('dashboardPage')" id="navDashboard">Dashboard</a></li>
+                <li><a href="#" onclick="showPage('requestFormPage')" id="navRequestForm" class="d-none">New Request</a></li>
+                <li><a href="#" onclick="showPage('myTasksPage')" id="navMyTasks">My Tasks</a></li>
+                <li><a href="#" onclick="showPage('statusPage')" id="navStatus">Request Status</a></li>
+                <li><a href="#" onclick="showPage('aboutPage')" id="navAbout">About</a></li>
+                <li><a href="#" onclick="showPage('profilePage')" id="navProfile">Profile</a></li>
+            </ul>
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">J</div>
+                <span id="userName">User</span>
+                <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboardPage" class="page">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="totalRequests">0</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pendingRequests">0</div>
+                    <div class="stat-label">Pending Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="completedRequests">0</div>
+                    <div class="stat-label">Completed Requests</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="rejectedRequests">0</div>
+                    <div class="stat-label">Rejected Requests</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Recent Requests</h2>
+                    <p class="card-subtitle">Last 10 requests</p>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Requester</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentRequestsTable">
+                            <tr>
+                                <td colspan="5" class="text-center">No requests found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Request Form -->
+    <div id="requestFormPage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">New Material Request</h2>
+                    <p class="card-subtitle">Fill in the required information</p>
+                </div>
+
+                <form id="newRequestForm">
+                    <div class="items-table">
+                        <h3>Required Items</h3>
+                        <div class="table-container">
+                            <table class="table" id="itemsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Brand</th>
+                                        <th>Item</th>
+                                        <th>Unit</th>
+                                        <th>Quantity</th>
+                                        <th>Required Date</th>
+                                        <th>Place of Use</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsTableBody">
+                                    <tr>
+                                        <td><input type="text" class="form-input" name="brand" placeholder="Brand name" required></td>
+                                        <td><input type="text" class="form-input" name="item" placeholder="Item name" required></td>
+                                        <td><input type="text" class="form-input" name="unit" placeholder="Unit" required></td>
+                                        <td><input type="number" class="form-input" name="qty" placeholder="Quantity" required></td>
+                                        <td><input type="date" class="form-input" name="requirementDate" required></td>
+                                        <td><input type="text" class="form-input" name="placeOfUse" placeholder="Place of use" required></td>
+                                        <td><button type="button" class="remove-item-btn" onclick="removeItem(this)">Remove</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <button type="button" class="add-item-btn" onclick="addItem()">Add New Item</button>
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Request</button>
+                        <button type="button" class="btn btn-secondary" onclick="showPage('dashboardPage')">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- My Tasks Page -->
+    <div id="myTasksPage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">My Tasks</h2>
+                    <p class="card-subtitle">Requests requiring your action</p>
+                </div>
+                <div id="tasksContainer">
+                    <p class="text-center">No tasks available</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Page -->
+    <div id="statusPage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Request Status</h2>
+                    <p class="card-subtitle">Track all requests</p>
+                </div>
+
+                <div class="mb-2">
+                    <select id="statusFilter" class="form-select" onchange="filterRequests()">
+                        <option value="all">All Requests</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Requester</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Current Step</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="statusTable">
+                            <tr>
+                                <td colspan="6" class="text-center">No requests found</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="aboutPage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">About the System</h2>
+                    <p class="card-subtitle">Construction Material Request Management System</p>
+                </div>
+                
+                <div class="about-content">
+                    <h3>System Overview</h3>
+                    <p>This Construction Material Request System is designed to streamline the process of requesting, approving, and managing construction materials within an organization. The system provides a digital workflow that replaces traditional paper-based processes.</p>
+                    
+                    <h3>Key Features</h3>
+                    <ul class="feature-list">
+                        <li><strong>Multi-level Approval Workflow:</strong> Requests go through a structured approval process involving multiple management levels</li>
+                        <li><strong>Real-time Status Tracking:</strong> Users can track their requests in real-time through the approval chain</li>
+                        <li><strong>Inventory Management:</strong> Warehouse managers can check stock availability and assign reference numbers</li>
+                        <li><strong>Digital Signatures:</strong> Support for digital signatures at each approval level</li>
+                        <li><strong>Role-based Access:</strong> Different user roles with specific permissions and responsibilities</li>
+                        <li><strong>Comprehensive Dashboard:</strong> Visual statistics and quick access to pending tasks</li>
+                    </ul>
+                    
+                    <h3>Workflow Process</h3>
+                    <p>The system follows a structured workflow:</p>
+                    <ol class="workflow-steps">
+                        <li>Employee creates a material request</li>
+                        <li>Warehouse Manager checks stock availability</li>
+                        <li>If not in stock, request goes through management approval chain:
+                            <ul>
+                                <li>Department Manager</li>
+                                <li>Construction Manager</li>
+                                <li>Administrative Manager</li>
+                                <li>Project Manager</li>
+                                <li>Project Director</li>
+                                <li>Procurement Manager</li>
+                            </ul>
+                        </li>
+                        <li>Once approved and purchased, warehouse receives the materials</li>
+                        <li>Employee is notified when materials are ready for pickup</li>
+                    </ol>
+                    
+                    <h3>Benefits</h3>
+                    <ul class="benefit-list">
+                        <li>Improved efficiency in material request processing</li>
+                        <li>Better inventory management and cost control</li>
+                        <li>Complete audit trail for all requests</li>
+                        <li>Reduced paperwork and manual processes</li>
+                        <li>Enhanced communication between departments</li>
+                        <li>Real-time visibility into request status</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Page -->
+    <div id="profilePage" class="page">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Profile</h2>
+                    <p class="card-subtitle">Your personal information</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Name</label>
+                    <input type="text" id="profileName" class="form-input" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Position</label>
+                    <input type="text" id="profilePosition" class="form-input" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Role</label>
+                    <input type="text" id="profileRole" class="form-input" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Digital Signature</label>
+                    <input type="file" id="signatureUpload" class="form-input" accept="image/*" onchange="uploadSignature(this)">
+                    <div id="currentSignature" class="mt-2 d-none">
+                        <img id="signaturePreview" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 8px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Details Modal -->
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Request Details</h3>
+                <span class="close" onclick="closeModal('requestModal')">&times;</span>
+            </div>
+            <div id="requestDetails">
+                <!-- Details will be filled here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Developed by Abd Al Mohaemn Abd Al Wahab (The Soul King)</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
